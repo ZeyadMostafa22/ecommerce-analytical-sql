@@ -22,10 +22,3 @@ Star Schema consisting of:
 - **Fact Table:** Fact_Order_Line
 - **Dimensions:** Dim_Date, Dim_Customer, Dim_Product,
   Dim_Category, Dim_Payment, Dim_Shipping
-
----
-
-
-- SQL Server / PostgreSQL
-- Git & GitHub
-- Draw.io (ERD)
