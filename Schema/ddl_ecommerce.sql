@@ -22,11 +22,14 @@ CREATE OR REPLACE TABLE DIM_DATE (
     date_key        INT             NOT NULL,          -- surrogate key  e.g. 20220101
     full_date       DATE            NOT NULL,
     day             TINYINT         NOT NULL,          -- 1–31
+    day_name        VARCHAR(15)     NOT NULL,
     month           TINYINT         NOT NULL,          -- 1–12
     month_name      VARCHAR(10)     NOT NULL,          -- 'January' … 'December'
     quarter         TINYINT         NOT NULL,          -- 1–4
     year            SMALLINT        NOT NULL,
     week_number     TINYINT         NOT NULL,          -- ISO week  1–53
+    is_weekend      TINYINT         NOT NULL,
+    is_holiday      TINYINT         NOT NULL,
 
     CONSTRAINT pk_dim_date PRIMARY KEY (date_key)
 );
@@ -39,11 +42,18 @@ CREATE OR REPLACE TABLE DIM_CUSTOMER (
     customer_key        INT             NOT NULL,       -- surrogate key
     customer_id         VARCHAR(20)     NOT NULL,       -- natural / business key
     gender              VARCHAR(10)     NOT NULL,       -- 'Male' | 'Female' | 'Other'
+    first_name          VARCHAR(50)     NOT NULL,       
+    last_name           VARCHAR(50)     NOT NULL,       
     age_group           VARCHAR(20)     NOT NULL,       -- '18-24' | '25-34' | '35-44' | '45-54' | '55+'
     city                VARCHAR(50)     NOT NULL,
+    state               VARCHAR(50)     NOT NULL,
+    country             VARCHAR(10)     NOT NULL,
+    email               VARCHAR(100)    NOT NULL,
+    phone               VARCHAR(20)     NOT NULL,
     region              VARCHAR(50)     NOT NULL,
     registration_date   DATE            NOT NULL,
     customer_segment    VARCHAR(30)     NOT NULL,       -- 'New' | 'Regular' | 'VIP' | 'At-Risk'
+    loyalty_points      INT             NOT NULL,
 
     CONSTRAINT pk_dim_customer PRIMARY KEY (customer_key)
 );
@@ -65,18 +75,25 @@ CREATE OR REPLACE TABLE DIM_CATEGORY (
 -- ------------------------------------------------------------
 -- 4. DIM_PRODUCT
 -- ------------------------------------------------------------
-CREATE OR REPLACE TABLE DIM_PRODUCT (
-    product_key         INT             NOT NULL,
-    product_id          VARCHAR(20)     NOT NULL,
-    product_name        VARCHAR(100)    NOT NULL,
-    brand               VARCHAR(50)     NOT NULL,
-    subcategory         VARCHAR(50)     NOT NULL,
-    launch_date         DATE            NOT NULL,
-    stock_quantity      INT             NOT NULL DEFAULT 0,   -- needed for Recommendation System
+CREATE TABLE DIM_PRODUCT (
+    product_key     INT             NOT NULL,
+    product_id      VARCHAR(20)     NOT NULL,
+    product_name    VARCHAR(100)    NOT NULL,
+    brand           VARCHAR(50)     NOT NULL,
+    subcategory     VARCHAR(50)     NOT NULL,
+    category_key    INT             NOT NULL,
+    launch_date     DATE            NOT NULL,
+    base_price      NUMBER(10,2)   NOT NULL,
+    cost_price      NUMBER(10,2)   NOT NULL,
+    stock_quantity  INT             NOT NULL,
+    is_active       TINYINT         NOT NULL,
+    weight_kg       NUMBER(10,2)   NOT NULL,
+    rating          NUMBER(3,1)    NOT NULL,
+    review_count    INT             NOT NULL,
 
     CONSTRAINT pk_dim_product PRIMARY KEY (product_key),
-    CONSTRAINT chk_stock CHECK (stock_quantity >= 0)
-);
+    CONSTRAINT chk_stock_qty CHECK (stock_quantity >= 0)
+) 
 
 
 -- ------------------------------------------------------------
@@ -85,6 +102,7 @@ CREATE OR REPLACE TABLE DIM_PRODUCT (
 CREATE OR REPLACE TABLE DIM_PAYMENT (
     payment_key         INT             NOT NULL,
     payment_method      VARCHAR(30)     NOT NULL,      -- 'Credit Card' | 'Debit Card' | 'PayPal' | 'COD' | 'Wallet'
+    is_digital          TINYINT         NOT NULL,
 
     CONSTRAINT pk_dim_payment PRIMARY KEY (payment_key)
 );
@@ -93,14 +111,16 @@ CREATE OR REPLACE TABLE DIM_PAYMENT (
 -- ------------------------------------------------------------
 -- 6. DIM_SHIPPING
 -- ------------------------------------------------------------
-CREATE OR REPLACE TABLE DIM_SHIPPING (
+CREATE TABLE DIM_SHIPPING (
     shipping_key        INT             NOT NULL,
-    shipping_type       VARCHAR(30)     NOT NULL,      -- 'Standard' | 'Express' | 'Same-Day' | 'Free'
-    delivery_days       TINYINT         NOT NULL,      -- average number of days
+    shipping_type       VARCHAR(30)     NOT NULL,
+    delivery_days       TINYINT         NOT NULL,
+    base_cost           NUMBER(10,2)   NOT NULL,
+    is_trackable        TINYINT         NOT NULL,
 
     CONSTRAINT pk_dim_shipping PRIMARY KEY (shipping_key),
-    CONSTRAINT chk_delivery_days CHECK (delivery_days > 0)
-);
+    CONSTRAINT chk_delivery_days CHECK (delivery_days >= 0)
+) 
 
 
 -- ============================================================
@@ -129,6 +149,7 @@ CREATE OR REPLACE TABLE FACT_ORDER_LINE (
 
     -- Measures
     quantity            INT             NOT NULL,
+    unit_price          NUMBER(12,2)    NOT NULL,
     gross_amount        NUMBER(12,2)    NOT NULL,       -- before discount  (unit_price × qty)
     discount_amount     NUMBER(12,2)    NOT NULL DEFAULT 0,
     net_amount          NUMBER(12,2)    NOT NULL,       -- gross − discount  (= revenue)
