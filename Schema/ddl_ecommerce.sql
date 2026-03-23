@@ -75,7 +75,7 @@ CREATE OR REPLACE TABLE DIM_CATEGORY (
 -- ------------------------------------------------------------
 -- 4. DIM_PRODUCT
 -- ------------------------------------------------------------
-CREATE TABLE DIM_PRODUCT (
+CREATE OR REPLACE TABLE DIM_PRODUCT (
     product_key     INT             NOT NULL,
     product_id      VARCHAR(20)     NOT NULL,
     product_name    VARCHAR(100)    NOT NULL,
@@ -111,7 +111,7 @@ CREATE OR REPLACE TABLE DIM_PAYMENT (
 -- ------------------------------------------------------------
 -- 6. DIM_SHIPPING
 -- ------------------------------------------------------------
-CREATE TABLE DIM_SHIPPING (
+CREATE OR REPLACE TABLE DIM_SHIPPING (
     shipping_key        INT             NOT NULL,
     shipping_type       VARCHAR(30)     NOT NULL,
     delivery_days       TINYINT         NOT NULL,
