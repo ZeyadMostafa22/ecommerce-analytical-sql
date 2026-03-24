@@ -1,3 +1,6 @@
+USE WAREHOUSE COMPUTE_WH;
+USE SCHEMA ECOM_DB.ECOM_DW;
+
 -- Task 6: Acceleration or Deceleration
 WITH monthly_revenue AS (
     -- Step 1: Monthly Revenue

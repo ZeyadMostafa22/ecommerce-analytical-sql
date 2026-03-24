@@ -1,17 +1,21 @@
-use schema ecom_db.ecom_dw;
 
 -- =============================================================================
 -- question 15 | segment customers into spending tiers (e.g., quartiles).
 -- =============================================================================
 
+
+USE WAREHOUSE COMPUTE_WH;
+USE SCHEMA ECOM_DB.ECOM_DW;
+
+
 with customer_total_spend as (
     select
         fol.customer_key,
-        dc.first_name || ' ' || dc.last_name as customer_name,
+        dc.customer_id as customer_name,
         sum(fol.net_amount)                  as total_spend
     from fact_order_line fol
     inner join dim_customer dc on fol.customer_key = dc.customer_key
-    group by fol.customer_key, dc.first_name, dc.last_name
+    group by fol.customer_key, dc.customer_id
 ),
 customer_quartiles as (
     select
@@ -34,3 +38,4 @@ select
     end as spending_tier
 from customer_quartiles
 order by spending_quartile desc, total_spend desc;
+

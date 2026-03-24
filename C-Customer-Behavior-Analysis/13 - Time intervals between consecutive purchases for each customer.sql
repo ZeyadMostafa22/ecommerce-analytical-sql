@@ -1,3 +1,6 @@
+USE WAREHOUSE COMPUTE_WH;
+USE SCHEMA ECOM_DB.ECOM_DW;
+
 -- Task 13: Measure time intervals between consecutive purchases for each customer.
 WITH order_dates AS (
     SELECT 

@@ -1,3 +1,6 @@
+USE WAREHOUSE COMPUTE_WH;
+USE SCHEMA ECOM_DB.ECOM_DW;
+
 -- Compare current month performance with previous month to detect growth or decline.
 WITH MONTHLY_TOTALS AS (
     SELECT

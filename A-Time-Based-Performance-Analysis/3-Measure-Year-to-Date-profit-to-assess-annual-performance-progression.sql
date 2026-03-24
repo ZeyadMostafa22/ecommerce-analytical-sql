@@ -1,4 +1,6 @@
-use schema ecom_db.ecom_dw;
+USE WAREHOUSE COMPUTE_WH;
+USE SCHEMA ECOM_DB.ECOM_DW;
+
 
 -- =============================================================================
 -- question 3 | measure year-to-date profit to assess annual performance

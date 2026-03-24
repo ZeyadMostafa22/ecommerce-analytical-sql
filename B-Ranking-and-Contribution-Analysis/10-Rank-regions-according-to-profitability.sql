@@ -1,4 +1,6 @@
-use schema ecom_db.ecom_dw;
+USE WAREHOUSE COMPUTE_WH;
+USE SCHEMA ECOM_DB.ECOM_DW;
+
 
 -- =============================================================================
 -- question 10 | rank regions according to profitability.
