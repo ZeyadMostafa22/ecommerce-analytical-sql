@@ -1,3 +1,6 @@
+USE WAREHOUSE COMPUTE_WH;
+USE SCHEMA ECOM_DB.ECOM_DW;
+
 -- Task 20: Evaluate profit consistency across time periods.
 WITH monthly_profit AS (
     SELECT 

@@ -1,3 +1,6 @@
+USE WAREHOUSE COMPUTE_WH;
+USE SCHEMA ECOM_DB.ECOM_DW;
+
 -- Task 8: Determine each product's contribution to its category's total revenue.
 WITH revenue_base AS (
     SELECT 

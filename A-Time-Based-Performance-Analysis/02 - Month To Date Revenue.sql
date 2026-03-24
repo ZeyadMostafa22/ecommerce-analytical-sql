@@ -1,3 +1,6 @@
+USE WAREHOUSE COMPUTE_WH;
+USE SCHEMA ECOM_DB.ECOM_DW;
+
 -- Task 2: Measure Month-to-Date performance to evaluate intra-month trends.
 WITH sumdaily AS (
     SELECT 

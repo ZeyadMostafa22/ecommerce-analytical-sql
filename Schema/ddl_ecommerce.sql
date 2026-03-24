@@ -6,6 +6,7 @@
 -- ------------------------------------------------------------
 -- 0. ENVIRONMENT SETUP
 -- ------------------------------------------------------------
+USE WAREHOUSE COMPUTE_WH;
 CREATE DATABASE IF NOT EXISTS ECOM_DB;
 CREATE SCHEMA  IF NOT EXISTS ECOM_DB.ECOM_DW;
 USE SCHEMA ECOM_DB.ECOM_DW;

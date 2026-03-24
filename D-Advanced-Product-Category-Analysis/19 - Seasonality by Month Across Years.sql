@@ -1,10 +1,13 @@
+USE WAREHOUSE COMPUTE_WH;
+USE SCHEMA ECOM_DB.ECOM_DW;
+
 WITH monthly_sales AS (
     SELECT 
         d.year,
         d.month,
         d.month_name,
         SUM(f.net_amount) AS revenue
-    FROM fact_sales f
+    FROM fact_order_line f
     JOIN dim_date d ON f.date_key = d.date_key
     GROUP BY d.year, d.month, d.month_name
 )
